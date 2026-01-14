@@ -2,6 +2,7 @@ import arcade
 from constants import LEVEL_MAP
 from constants import TILE_SIZE
 from constants import rows
+
 """
 מודול הלוגיקה הראשית של משחק הפקמן.
 
@@ -37,3 +38,11 @@ class PacmanGame(arcade.View):
                     self.list_player = (x, y)
                 elif cell == "G":
                     self.list_ghost.append((x, y))
+
+    def on_draw(self):
+        self.clear()
+        self.list_wall.draw()
+        self.list_coin.draw()
+        self.list_ghost.draw()
+        self.list_player.draw()
+        self.game_over.draw()
