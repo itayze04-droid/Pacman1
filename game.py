@@ -48,8 +48,11 @@ class PacmanGame(arcade.View):
                     self.list_ghost.append(Enemy(x, y))
 
     def on_draw(self):
-        arcade.clear()
-
+        self.clear()
+        self.list_wall.draw()
+        self.list_coin.draw()
+        self.list_ghost.draw()
+        self.list_player.draw()
         arcade.draw_text(f"Score: {self.player.score}",10,self.window.height - 30,arcade.color.WHITE,16)
         arcade.draw_text(f"Lives: {self.player.lives}",10,self.window.height - 55,arcade.color.WHITE,16)
         if self.game_over:
