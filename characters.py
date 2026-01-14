@@ -12,41 +12,58 @@ import random
 import arcade
 
 class Coin(arcade.Sprite):
-    def __init__(self, x_center, y_center, value=10):
-        super().__init__("assets/coin.png", scale=0.5)
+    def __init__(self, x_center, y_center):
+        super().__init__()
         self.center_x = x_center
         self.center_y = y_center
-        self.value = value
+        self.size = 20
+        self.color = arcade.color.GOLD
+        self.value = 10
+
+    def draw(self):
+        arcade.draw_circle_filled(self.center_x, self.center_y, self.size / 2, self.color)
 
 class Wall(arcade.Sprite):
     def __init__(self, x_center, y_center):
-        super().__init__("assets/wall.png", scale=0.5)
+        super().__init__()
         self.center_x = x_center
         self.center_y = y_center
+        self.width = 32
+        self.height = 32
+        self.color = arcade.color.BLUE
 
+    def draw(self):
+        arcade.draw_rectangle_filled(self.center_x, self.center_y, self.width, self.height, self.color)
 
 class Character(arcade.Sprite):
-    def __init__(self, image_path, x_center, y_center, speed=1):
-        super().__init__(image_path, scale=0.5)
+    def __init__(self, x_center, y_center):
+        super().__init__()
         self.center_x = x_center
         self.center_y = y_center
-        self.speed = speed
+        self.speed = 1
         self.change_x = 0
         self.change_y = 0
+        self.size = 28
+        self.color = arcade.color.YELLOW
+
+    def draw(self):
+        arcade.draw_circle_filled(self.center_x, self.center_y, self.size / 2, self.color)
 
 class Player(Character):
-    def __init__(self, x_center, y_center, speed=2):
-        super().__init__("assets/pacman.png", x_center, y_center, speed)
+    def __init__(self, x_center, y_center):
+        super().__init__(x_center, y_center)
         self.score = 0
         self.lives = 3
+        self.color = arcade.color.YELLOW  # צבע "קבוע" של השחקן
 
     def update(self):
         self.center_x += self.change_x * self.speed
         self.center_y += self.change_y * self.speed
 
 class Enemy(Character):
-    def __init__(self, x_center, y_center, speed=1):
-        super().__init__("assets/ghost.png", x_center, y_center, speed)
+    def __init__(self, x_center, y_center):
+        super().__init__(x_center, y_center)
+        self.color = arcade.color.RED
         self.direction_change_time = 0
 
     def pick_new_direction(self):
@@ -58,6 +75,5 @@ class Enemy(Character):
         self.direction_change_time -= time_delta
         if self.direction_change_time <= 0:
             self.pick_new_direction()
-
         self.center_x += self.change_x * self.speed
         self.center_y += self.change_y * self.speed
