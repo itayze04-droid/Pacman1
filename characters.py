@@ -10,61 +10,64 @@
 """
 import random
 import arcade
+from pygame.examples.multiplayer_joystick import player
+
+from constants import TILE_SIZE
+
 
 class Coin(arcade.Sprite):
-    def __init__(self, x_center, y_center):
+    def __init__(self, x, y):
         super().__init__()
-        self.center_x = x_center
-        self.center_y = y_center
-        self.size = 20
-        self.color = arcade.color.GOLD
-        self.value = 10
+        self.texture = arcade.make_circle_texture(TILE_SIZE//10, arcade.color.GOLD)
+        self.center_x = x
+        self.center_y = y
+        self.width=TILE_SIZE//5
+        self.height=TILE_SIZE//5
 
-    def draw(self):
-        arcade.draw_circle_filled(self.center_x, self.center_y, self.size / 2, self.color)
+
+
 
 class Wall(arcade.Sprite):
-    def __init__(self, x_center, y_center):
+    def __init__(self, x, y):
         super().__init__()
-        self.center_x = x_center
-        self.center_y = y_center
-        self.width = 32
-        self.height = 32
-        self.color = arcade.color.BLUE
+        self.texture = arcade.make_rectangle_texture(TILE_SIZE, TILE_SIZE,arcade.color.BLUE)
+        self.center_x = x
+        self.center_y = y
+        self.width = TILE_SIZE
+        self.height = TILE_SIZE
 
-    def draw(self):
-        arcade.draw_rectangle_filled(self.center_x, self.center_y, self.width, self.height, self.color)
+
 
 class Character(arcade.Sprite):
-    def __init__(self, x_center, y_center):
+    def __init__(self, x, y, texture):
         super().__init__()
-        self.center_x = x_center
-        self.center_y = y_center
-        self.speed = 1
+        self.texture = texture
+        self.center_x = x
+        self.center_y = y
+        self.speed = 2
         self.change_x = 0
         self.change_y = 0
-        self.size = 28
-        self.color = arcade.color.YELLOW
+        self.width = TILE_SIZE // 7
+        self.height = TILE_SIZE // 7
 
-    def draw(self):
-        arcade.draw_circle_filled(self.center_x, self.center_y, self.size / 2, self.color)
 
+player_texture=arcade.make_circle_texture(TILE_SIZE//7,arcade.color.PURPLE)
 class Player(Character):
     def __init__(self, x_center, y_center):
-        super().__init__(x_center, y_center)
+        super().__init__(x_center, y_center,player_texture)
         self.score = 0
         self.lives = 3
-        self.color = arcade.color.YELLOW  # צבע "קבוע" של השחקן
+
 
     def update(self):
         self.center_x += self.change_x * self.speed
         self.center_y += self.change_y * self.speed
-
+enemy_texture=arcade.make_circle_texture(TILE_SIZE//7,arcade.color.RED)
 class Enemy(Character):
     def __init__(self, x_center, y_center):
-        super().__init__(x_center, y_center)
-        self.color = arcade.color.RED
+        super().__init__(x_center, y_center,enemy_texture)
         self.direction_change_time = 0
+
 
     def pick_new_direction(self):
         directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
