@@ -79,42 +79,39 @@ class PacmanGame(arcade.View):
         if key == arcade.key.A or key == arcade.key.D:
             self.player.change_x=0
 
-    def on_update(self,delta_time):
+    def on_update(self, delta_time):
         if self.game_over:
             return
 
-        pre_x=characters.Player.center_x
-        pre_y=characters.Player.center_y
+        pre_x = Player.center_x
+        pre_y = Player.center_y
         self.Player.update()
 
-
-        if arcade.check_for_collision_with_list(self.Player,self.list_wall):
+        if arcade.check_for_collision_with_list(self.Player, self.list_wall):
             self.Player.center_x = pre_x
             self.Player.center_y = pre_y
 
-        hit_coins= arcade.check_for_collision_with_list(self.Player,self.list_coin)
+        hit_coins = arcade.check_for_collision_with_list(self.Player, self.list_coin)
         for coin in hit_coins:
-            self.Player.score+=1
+            self.Player.score += 1
             coin.remove_from_sprite_lists()
 
         for ghost in self.list_ghost:
-            ghost_old_x=ghost.center_x
-            ghost_old_y=ghost.center_y
+            ghost_old_x = ghost.center_x
+            ghost_old_y = ghost.center_y
             ghost.update(delta_time)
 
-            if arcade.check_for_collision_with_list(ghost,self.list_wall):
-                ghost.center_x=ghost_old_x
-                ghost.center_y=ghost_old_y
+            if arcade.check_for_collision_with_list(ghost, self.list_wall):
+                ghost.center_x = ghost_old_x
+                ghost.center_y = ghost_old_y
                 ghost.pick_new_direction()
 
-
-
-        if arcade.check_for_collision_with_list(self.Player,self.list_ghost):
-            self.Player.lives-=1
-            self.Player.center_x=self.start_x
+        if arcade.check_for_collision_with_list(self.Player, self.list_ghost):
+            self.Player.lives -= 1
+            self.Player.center_x = self.start_x
             self.Player.center_y = self.start_y
-            self.Player.change_x=0
-            self.Player.change_y=0
+            self.Player.change_x = 0
+            self.Player.change_y = 0
 
-            if self.Player.lives<=0:
-                self.game_over=True
+            if self.Player.lives <= 0:
+                self.game_over = True
