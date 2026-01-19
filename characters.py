@@ -16,7 +16,7 @@ from constants import TILE_SIZE
 class Coin(arcade.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.texture = arcade.make_circle_texture(TILE_SIZE//2, arcade.color.GOLD)
+        self.texture = arcade.make_circle_texture(TILE_SIZE//2 - 6, arcade.color.GOLD)
         self.center_x = x
         self.center_y = y
 
@@ -37,7 +37,7 @@ class Character(arcade.Sprite):
         self.change_x = 0
         self.change_y = 0
 
-player_texture = arcade.make_circle_texture(TILE_SIZE//2, arcade.color.PURPLE)
+player_texture = arcade.make_circle_texture(TILE_SIZE-6, arcade.color.PURPLE)
 class Player(Character):
     def __init__(self, x, y):
         super().__init__(x, y, player_texture)
@@ -48,7 +48,7 @@ class Player(Character):
         self.center_x += self.change_x * self.speed
         self.center_y += self.change_y * self.speed
 
-enemy_texture = arcade.make_soft_square_texture(TILE_SIZE//2, arcade.color.RED, 255)
+enemy_texture = arcade.make_soft_square_texture(TILE_SIZE-6, arcade.color.RED, 255)
 class Enemy(Character):
     def __init__(self, x, y):
         super().__init__(x, y, enemy_texture)
