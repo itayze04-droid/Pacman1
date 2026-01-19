@@ -17,8 +17,8 @@ class PacmanGame(arcade.View):
         self.object_list = None
         self.player = None
         self.game_over = False
-        self.start_x = 0
-        self.start_y = 0
+        self.start_x =TILE_SIZE+18
+        self.start_y = TILE_SIZE+18
 
     def setup(self):
         self.list_wall = arcade.SpriteList()
