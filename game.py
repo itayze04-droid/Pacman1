@@ -1,6 +1,8 @@
 import arcade
-from constants import *
-from characters import *
+from constants import LEVEL_MAP
+from constants import TILE_SIZE
+from constants import rows
+from characters import Wall, Coin, Player, Enemy
 """
 מודול הלוגיקה הראשית של משחק הפקמן.
 
