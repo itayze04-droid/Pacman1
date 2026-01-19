@@ -57,3 +57,9 @@ class PacmanGame(arcade.View):
         arcade.draw_text(f"Lives: {self.player.lives}",10,self.window.height - 55,arcade.color.WHITE,16)
         if self.game_over:
             arcade.draw_text("GAME OVER",self.window.width / 2,self.window.height / 2,arcade.color.RED,40,)
+
+    def on_key_release(self,key, modifiers):
+        if key==arcade.key.DOWN or key ==arcade.key.UP:
+            self.player.change_y=0
+        if key == arcade.key.LEFT or key == arcade.key.RIGHT:
+            self.player.change_x=0
