@@ -70,7 +70,6 @@ class PacmanGame(arcade.View):
             self.player.change_x = 1
             self.player.change_y = 0
 
-
     def on_key_release(self,key, modifiers):
         if key==arcade.key.W or key ==arcade.key.S:
             self.player.change_y=0
