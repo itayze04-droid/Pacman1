@@ -1,8 +1,6 @@
 import arcade
-from constants import LEVEL_MAP
-from constants import TILE_SIZE
-from constants import rows
-from characters import Wall, Coin, Player, Enemy
+from constants import *
+from characters import *
 """
 מודול הלוגיקה הראשית של משחק הפקמן.
 
@@ -57,6 +55,21 @@ class PacmanGame(arcade.View):
         arcade.draw_text(f"Lives: {self.player.lives}",10,self.window.height - 55,arcade.color.WHITE,16)
         if self.game_over:
             arcade.draw_text("GAME OVER",self.window.width / 2,self.window.height / 2,arcade.color.RED,40,)
+
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.W:
+            self.player.change_x = 0
+            self.player.change_y = 1
+        elif key == arcade.key.S:
+            self.player.change_x = 0
+            self.player.change_y = -1
+        elif key == arcade.key.A:
+            self.player.change_x = -1
+            self.player.change_y = 0
+        elif key == arcade.key.D:
+            self.player.change_x = 1
+            self.player.change_y = 0
+
 
     def on_key_release(self,key, modifiers):
         if key==arcade.key.DOWN or key ==arcade.key.UP:
