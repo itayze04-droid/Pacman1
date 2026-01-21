@@ -54,7 +54,9 @@ class PacmanGame(arcade.View):
         arcade.draw_text(f"Score: {self.player.score}",10,self.window.height - 30,arcade.color.WHITE,16)
         arcade.draw_text(f"Lives: {self.player.lives}",10,self.window.height - 55,arcade.color.WHITE,16)
         if self.game_over:
-            arcade.draw_text("GAME OVER",self.window.width / 2,self.window.height / 2,arcade.color.RED,40,)
+            arcade.draw_text("GAME OVER",self.window.width /2-150,self.window.height / 2,arcade.color.RED,40,)
+        if len(self.list_coin) == 0:
+            arcade.draw_text("YOU WON!", self.window.width / 2 - 150, self.window.height / 2, arcade.color.GREEN, 40, )
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.W:
