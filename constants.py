@@ -24,7 +24,6 @@ with open("LEVEL_MAP.txt", "r") as file:
     lines = file.read().splitlines()
 
 LEVEL_MAP = lines
-
 # נחשב את רוחב המפה בפיקסלים לשימוש בלוגיקה
 MAP_WIDTH_PIXELS = len(LEVEL_MAP[0]) * TILE_SIZE
 
