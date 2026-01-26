@@ -1,23 +1,14 @@
 import arcade
 from constants import WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE
 from game import PacmanGame
-
-"""
-נקודת הכניסה למשחק פקמן.
-
-אחראית על:
-- יצירת חלון Arcade
-- יצירת אובייקט PacmanGame
-- אתחול המשחק
-- הרצת לולאת המשחק
-"""
+from Start import *
 
 def main():
-    """פונקציית main שמריצה את המשחק."""
     window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
-    view = PacmanGame()
-    view.setup()
-    window.show_view(view)
+
+    start_view = StartView()
+    window.show_view(start_view)
+
     arcade.run()
 
 if __name__ == "__main__":

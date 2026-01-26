@@ -1,6 +1,7 @@
 import arcade
 from constants import *
 from characters import *
+
 """
 מודול הלוגיקה הראשית של משחק הפקמן.
 
@@ -58,6 +59,7 @@ class PacmanGame(arcade.View):
         if len(self.list_coin) == 0 :
             arcade.draw_text("YOU WON!", self.window.width / 2 - 145, self.window.height / 2, arcade.color.GREEN, 40, )
             self.game_over=True
+
     def on_key_press(self, key, modifiers):
         if key == arcade.key.W:
             self.player.change_x = 0
@@ -71,6 +73,9 @@ class PacmanGame(arcade.View):
         elif key == arcade.key.D:
             self.player.change_x = 1
             self.player.change_y = 0
+
+
+
 
 
     def on_key_release(self,key, modifiers):
