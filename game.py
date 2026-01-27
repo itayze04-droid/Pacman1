@@ -22,6 +22,7 @@ class PacmanGame(arcade.View):
         self.game_over = False
         self.start_x = TILE_SIZE + 18
         self.start_y = TILE_SIZE + 18
+        self.background_music=arcade.load_sound("Pac-Man Intro Music - Gaming Background Music ( 1HOUR video) [Z9mzdzAVF-s].mp3")
 
     def setup(self):
         self.wall_list = arcade.SpriteList()
@@ -30,6 +31,10 @@ class PacmanGame(arcade.View):
         self.player_list = arcade.SpriteList()
         self.apple_list = arcade.SpriteList()
         self.game_over = False
+        self.music_player = self.background_music.play(
+            volume=0.4,
+            loop=True
+        )
 
         for row_idx, row in enumerate(LEVEL_MAP):
             for col_idx, cell in enumerate(row):
@@ -172,4 +177,4 @@ class PacmanGame(arcade.View):
                 self.player.change_y = 0
                 if self.player.lives <= 0:
                     self.game_over = True
-
+                    arcade.stop_sound(self.music_player)
