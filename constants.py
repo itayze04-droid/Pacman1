@@ -21,11 +21,13 @@ TILE_SIZE = 32
 # . - מטבע
 # P - פקמן (נקודת התחלה לשחקן)
 # G - רוח
-LEVEL_MAP = [
-    "########################",
-    "#..........##..........#",
-    "#.####.###.##.###.####.#",
-    "#P....................G#",
-    "########################",
-]
+with open("LEVEL_MAP.txt", "r") as file:
+    lines = file.read().splitlines()
+
+LEVEL_MAP = lines
+# נחשב את רוחב המפה בפיקסלים לשימוש בלוגיקה
+MAP_WIDTH_PIXELS = len(LEVEL_MAP[0]) * TILE_SIZE
+
+
+
 rows = len(LEVEL_MAP)
