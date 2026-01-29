@@ -101,19 +101,19 @@ class PacmanGame(arcade.View):
         if self.game_over:
             return
 
-        map_left_boundary = self.offset_x
-        map_right_boundary = self.offset_x + MAP_WIDTH_PIXELS
-
         old_x = self.player.center_x
         old_y = self.player.center_y
         self.player.update()
+        if arcade.check_for_collision_with_list(self.player, self.wall_list):
+            self.player.center_x = old_x
+            self.player.center_y = old_y
+
+        map_left_boundary = self.offset_x
+        map_right_boundary = self.offset_x + MAP_WIDTH_PIXELS
         if self.player.center_x < map_left_boundary:
             self.player.center_x = map_right_boundary
         elif self.player.center_x > map_right_boundary:
             self.player.center_x = map_left_boundary
-        if arcade.check_for_collision_with_list(self.player, self.wall_list):
-            self.player.center_x = old_x
-            self.player.center_y = old_y
 
         if self.player.center_x < 0:
             self.player.center_x = MAP_WIDTH_PIXELS
