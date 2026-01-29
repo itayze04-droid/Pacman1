@@ -14,7 +14,7 @@ from game import PacmanGame
 
 def main():
     """פונקציית main שמריצה את המשחק."""
-    window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
+    window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, fullscreen=True)
     view = PacmanGame()
     view.setup()
     window.show_view(view)

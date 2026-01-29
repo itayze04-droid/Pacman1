@@ -6,11 +6,12 @@
 - גודל אריח בודד במפה
 - מפה לוגית (LEVEL_MAP) שמגדירה קירות, מטבעות, פקמן ורוחות.
 """
-
+import arcade
 # הגדרות חלון
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
 WINDOW_TITLE = "Pacman Arcade Example"
+SCREEN_WIDTH, SCREEN_HEIGHT = arcade.get_display_size()
 
 # גודל אריח במפה (בפיקסלים)
 TILE_SIZE = 32
