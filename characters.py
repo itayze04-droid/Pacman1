@@ -49,27 +49,32 @@ class Player(Character):
 
 enemy_texture = arcade.make_soft_square_texture(TILE_SIZE-6, arcade.color.RED, 255)
 ghost_power_texture = arcade.make_soft_square_texture(TILE_SIZE-6, arcade.color.LIGHT_BLUE, 255)
+
+
 class Enemy(Character):
     def __init__(self, x, y):
-        super().__init__(x, y, enemy_texture)
+        self.normal_texture = arcade.load_texture("ghost.png")
+        self.ghost_power_texture = arcade.make_soft_square_texture(TILE_SIZE - 6, arcade.color.LIGHT_BLUE, 255)
+        super().__init__(x, y, self.normal_texture)
+        self.scale = (TILE_SIZE - 4) / self.texture.width
         self.direction_change_time = 0
 
     def pick_new_direction(self):
-        directions = [(0,1),(0,-1),(1,0),(-1,0)]
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         self.change_x, self.change_y = random.choice(directions)
         self.direction_change_time = random.uniform(0.3, 1.0)
 
-    def update(self, delta_time=1/60, power_mode=False):
+    def update(self, delta_time=1 / 60, power_mode=False):
         self.direction_change_time -= delta_time
         if self.direction_change_time <= 0:
             self.pick_new_direction()
 
         if power_mode:
-            self.texture = ghost_power_texture
+            self.texture = self.ghost_power_texture
             speed_multiplier = 0.5
-        else:
-            self.texture = enemy_texture
-            speed_multiplier = 1.0
 
+        else:
+            self.texture = self.normal_texture
+            speed_multiplier = 1.0
         self.center_x += self.change_x * self.speed * speed_multiplier
         self.center_y += self.change_y * self.speed * speed_multiplier
