@@ -22,7 +22,7 @@ class PacmanGame(arcade.View):
         self.game_over = False
         self.start_x = TILE_SIZE + 18
         self.start_y = TILE_SIZE + 18
-        self.background_music=arcade.load_sound("Pac-Man Intro Music - Gaming Background Music ( 1HOUR video) [Z9mzdzAVF-s].mp3")
+        self.background_music=arcade.load_sound("Pac-Man intro music.mp3")
 
     def setup(self):
         self.wall_list = arcade.SpriteList()

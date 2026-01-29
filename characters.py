@@ -33,7 +33,7 @@ class Character(arcade.Sprite):
         self.change_x = 0
         self.change_y = 0
 
-player_texture = arcade.make_circle_texture(TILE_SIZE-6, arcade.color.PURPLE)
+player_texture = arcade.make_circle_texture(TILE_SIZE-6, arcade.color.YELLOW)
 class Player(Character):
     def __init__(self, x, y):
         super().__init__(x, y, player_texture)
