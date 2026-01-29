@@ -25,6 +25,11 @@ class PacmanGame(arcade.View):
         self.background_music=arcade.load_sound("Pac-Man intro music.mp3")
 
     def setup(self):
+        map_width = len(LEVEL_MAP[0]) * TILE_SIZE
+        map_height = len(LEVEL_MAP) * TILE_SIZE
+
+        self.offset_x = (self.window.width - map_width) // 2
+        self.offset_y = (self.window.height - map_height) // 2
         self.wall_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
         self.ghost_list = arcade.SpriteList()
@@ -38,8 +43,8 @@ class PacmanGame(arcade.View):
 
         for row_idx, row in enumerate(LEVEL_MAP):
             for col_idx, cell in enumerate(row):
-                x = col_idx * TILE_SIZE + TILE_SIZE / 2
-                y = (rows - row_idx - 1) * TILE_SIZE + TILE_SIZE / 2
+                x = col_idx * TILE_SIZE + TILE_SIZE / 2 + self.offset_x
+                y = (rows - row_idx - 1) * TILE_SIZE + TILE_SIZE / 2 + self.offset_y
 
                 if cell == "#":
                     self.wall_list.append(Wall(x, y))
@@ -48,6 +53,8 @@ class PacmanGame(arcade.View):
                 elif cell == "P":
                     self.player = Player(x, y)
                     self.player_list.append(self.player)
+                    self.start_x = self.player.center_x
+                    self.start_y = self.player.center_y
                 elif cell == "G":
                     self.ghost_list.append(Enemy(x, y))
                 elif cell == "A":
