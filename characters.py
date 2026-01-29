@@ -53,8 +53,11 @@ ghost_power_texture = arcade.make_soft_square_texture(TILE_SIZE-6, arcade.color.
 
 class Enemy(Character):
     def __init__(self, x, y):
+
         self.normal_texture = arcade.load_texture("ghost.png")
-        self.ghost_power_texture = arcade.make_soft_square_texture(TILE_SIZE - 6, arcade.color.LIGHT_BLUE, 255)
+
+        self.scared_texture = arcade.load_texture("blue_ghost.png")
+
         super().__init__(x, y, self.normal_texture)
         self.scale = (TILE_SIZE - 4) / self.texture.width
         self.direction_change_time = 0
@@ -70,11 +73,12 @@ class Enemy(Character):
             self.pick_new_direction()
 
         if power_mode:
-            self.texture = self.ghost_power_texture
-            speed_multiplier = 0.5
 
+            self.texture = self.scared_texture
+            speed_multiplier = 0.5
         else:
             self.texture = self.normal_texture
             speed_multiplier = 1.0
+
         self.center_x += self.change_x * self.speed * speed_multiplier
         self.center_y += self.change_y * self.speed * speed_multiplier

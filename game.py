@@ -7,37 +7,38 @@ from characters import *
 class PacmanGame(arcade.View):
     def __init__(self):
         super().__init__()
-        # אתחול רשימות הספריטים
+
         self.wall_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
         self.ghost_list = arcade.SpriteList()
         self.player_list = arcade.SpriteList()
         self.apple_list = arcade.SpriteList()
-        self.heart_list = arcade.SpriteList()  # רשימת הלבבות לתצוגה
+        self.heart_list = arcade.SpriteList()
 
         self.player = None
         self.game_over = False
         self.start_x = 0
         self.start_y = 0
-
-        # טעינת מוזיקת רקע
-        try:
-            self.background_music = arcade.load_sound("Pac-Man intro music.mp3")
-        except:
-            self.background_music = None
-            print("Warning: Music file not found.")
-
+        self.background_music = arcade.load_sound("man-theme-original (mp3cut.net).mp3")
         self.music_player = None
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        if self.game_over:
+            button_left = self.window.width / 2 - 100
+            button_right = self.window.width / 2 + 100
+            button_bottom = self.window.height / 2 - 65
+            button_top = self.window.height / 2 - 15
+
+            if button_left < x < button_right and button_bottom < y < button_top:
+                self.setup()
 
     def setup(self):
         map_width = len(LEVEL_MAP[0]) * TILE_SIZE
         map_height = len(LEVEL_MAP) * TILE_SIZE
 
-        # חישוב המרחק כדי למרכז את המפה במסך
         self.offset_x = (self.window.width - map_width) // 2
         self.offset_y = (self.window.height - map_height) // 2
 
-        # איפוס רשימות
         self.wall_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
         self.ghost_list = arcade.SpriteList()
@@ -47,11 +48,9 @@ class PacmanGame(arcade.View):
 
         self.game_over = False
 
-        # ניהול מוזיקה
         if self.background_music and not self.music_player:
             self.music_player = self.background_music.play(volume=0.4, loop=True)
 
-        # יצירת המבוך לפי המפה ב-constants.py
         for row_idx, row in enumerate(LEVEL_MAP):
             for col_idx, cell in enumerate(row):
                 x = col_idx * TILE_SIZE + TILE_SIZE / 2 + self.offset_x
@@ -70,34 +69,29 @@ class PacmanGame(arcade.View):
                     self.ghost_list.append(Enemy(x, y))
                 elif cell == "A":
                     self.apple_list.append(Apple(x, y))
-
-        # יצירת הלבבות (חיים) - מוגדלים
+        self.map_left = self.offset_x
+        self.map_right = self.offset_x + MAP_WIDTH_PIXELS
+        self.map_bottom = self.offset_y
+        self.map_top = self.offset_y + MAP_HEIGHT_PIXELS
         if self.player:
             for i in range(self.player.lives):
-                # scale=0.15 הופך אותם לגדולים וברורים
                 heart = arcade.Sprite("pngegg.png", scale=0.08)
-                # רווח של 60 פיקסלים בין לב ללב
                 heart.center_x = 50 + (i * 45)
-                # מיקום מתחת לטקסט הניקוד
                 heart.center_y = self.window.height - 80
                 self.heart_list.append(heart)
 
     def on_draw(self):
         self.clear()
 
-        # ציור כל האלמנטים
         self.wall_list.draw()
         self.coin_list.draw()
         self.apple_list.draw()
         self.ghost_list.draw()
         self.player_list.draw()
-        self.heart_list.draw()  # ציור הלבבות שנותרו
+        self.heart_list.draw()
 
-        # כתיבת הניקוד
         arcade.draw_text(f"Score: {self.player.score}", 10, self.window.height - 30,
                          arcade.color.WHITE, 16, bold=True)
-
-        # הודעות סיום משחק
         if self.game_over:
             if len(self.coin_list) != 0:
                 arcade.draw_text("GAME OVER", self.window.width / 2, self.window.height / 2,
@@ -106,7 +100,11 @@ class PacmanGame(arcade.View):
                 arcade.draw_text("YOU WON!", self.window.width / 2, self.window.height / 2,
                                  arcade.color.GREEN, 40, align="center", anchor_x="center")
 
+
+
     def on_key_press(self, key, modifiers):
+        if key == arcade.key.ESCAPE:
+            arcade.exit()
         if key == arcade.key.W:
             self.player.change_x, self.player.change_y = 0, 1
         elif key == arcade.key.S:
@@ -122,25 +120,50 @@ class PacmanGame(arcade.View):
         if key in [arcade.key.A, arcade.key.D]:
             self.player.change_x = 0
 
+    def get_random_free_position(self):
+        while True:
+            row = random.randint(0, len(LEVEL_MAP) - 1)
+            col = random.randint(0, len(LEVEL_MAP[0]) - 1)
+            if LEVEL_MAP[row][col] != "#":
+                x = col * TILE_SIZE + TILE_SIZE / 2 + self.offset_x
+                y = (rows - row - 1) * TILE_SIZE + TILE_SIZE / 2 + self.offset_y
+                return x, y
+
+
     def on_update(self, delta_time):
         if self.game_over:
             return
 
-        # עדכון שחקן ומניעת מעבר דרך קירות
         old_x, old_y = self.player.center_x, self.player.center_y
         self.player.update()
+        if self.player.center_x < self.map_left:
+            self.player.center_x = self.map_right - TILE_SIZE
+
+        elif self.player.center_x > self.map_right:
+            self.player.center_x = self.map_left + TILE_SIZE
+        self.player.center_x = max(self.map_left, min(self.player.center_x, self.map_right))
+        self.player.center_y = max(self.map_bottom, min(self.player.center_y, self.map_top))
         if arcade.check_for_collision_with_list(self.player, self.wall_list):
             self.player.center_x, self.player.center_y = old_x, old_y
 
-        # עדכון רוחות
         for ghost in self.ghost_list:
             g_old_x, g_old_y = ghost.center_x, ghost.center_y
             ghost.update(delta_time, self.player.power_mode)
+
             if arcade.check_for_collision_with_list(ghost, self.wall_list):
                 ghost.center_x, ghost.center_y = g_old_x, g_old_y
                 ghost.pick_new_direction()
 
-        # איסוף מטבעות
+            if ghost.center_x < self.offset_x:
+                ghost.center_x = self.offset_x + MAP_WIDTH_PIXELS
+            elif ghost.center_x > self.offset_x + MAP_WIDTH_PIXELS:
+                ghost.center_x = self.offset_x
+
+            if ghost.center_y < self.offset_y:
+                ghost.center_y = self.offset_y + MAP_HEIGHT_PIXELS
+            elif ghost.center_y > self.offset_y + MAP_HEIGHT_PIXELS:
+                ghost.center_y = self.offset_y
+
         hit_coins = arcade.check_for_collision_with_list(self.player, self.coin_list)
         for coin in hit_coins:
             self.player.score += 1
@@ -149,7 +172,6 @@ class PacmanGame(arcade.View):
         if len(self.coin_list) == 0:
             self.game_over = True
 
-        # איסוף תפוח (Power Mode)
         hit_apples = arcade.check_for_collision_with_list(self.player, self.apple_list)
         for apple in hit_apples:
             apple.remove_from_sprite_lists()
@@ -161,23 +183,24 @@ class PacmanGame(arcade.View):
             if self.player.power_time <= 0:
                 self.player.power_mode = False
 
-        # בדיקת התנגשות עם רוחות
+
         ghost_hit_list = arcade.check_for_collision_with_list(self.player, self.ghost_list)
         if ghost_hit_list:
             if self.player.power_mode:
-                # פקמן חזק - הרוחות חוזרות להתחלה
                 for ghost in ghost_hit_list:
-                    ghost.center_x, ghost.center_y = self.start_x, self.start_y
+                    new_x, new_y = self.get_random_free_position()
+                    ghost.center_x = new_x
+                    ghost.center_y = new_y
                     self.player.score += 10
             else:
-                # פקמן חלש - איבוד חיים ולב מהתצוגה
                 self.player.lives -= 1
                 if len(self.heart_list) > 0:
-                    self.heart_list.pop()  # מסיר את הלב האחרון מהמסך
+                    self.heart_list.pop()
 
-                # החזרת שחקן להתחלה
                 self.player.center_x, self.player.center_y = self.start_x, self.start_y
                 self.player.change_x, self.player.change_y = 0, 0
 
                 if self.player.lives <= 0:
+                    self.game_over = True
+                    arcade.stop_sound(self.music_player)
                     self.game_over = True
