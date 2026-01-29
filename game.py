@@ -53,12 +53,17 @@ class PacmanGame(arcade.View):
                 elif cell == "P":
                     self.player = Player(x, y)
                     self.player_list.append(self.player)
-                    self.start_x = self.player.center_x
-                    self.start_y = self.player.center_y
+                    self.start_x = x
+                    self.start_y = y
+
                 elif cell == "G":
                     self.ghost_list.append(Enemy(x, y))
                 elif cell == "A":
                     self.apple_list.append(Apple(x, y))
+        self.map_left = self.offset_x
+        self.map_right = self.offset_x + MAP_WIDTH_PIXELS
+        self.map_bottom = self.offset_y
+        self.map_top = self.offset_y + MAP_HEIGHT_PIXELS
 
     def on_draw(self):
         self.clear()
@@ -108,17 +113,10 @@ class PacmanGame(arcade.View):
             self.player.center_x = old_x
             self.player.center_y = old_y
 
-        map_left_boundary = self.offset_x
-        map_right_boundary = self.offset_x + MAP_WIDTH_PIXELS
-        if self.player.center_x < map_left_boundary:
-            self.player.center_x = map_right_boundary
-        elif self.player.center_x > map_right_boundary:
-            self.player.center_x = map_left_boundary
-
-        if self.player.center_x < 0:
-            self.player.center_x = MAP_WIDTH_PIXELS
-        elif self.player.center_x > MAP_WIDTH_PIXELS:
-            self.player.center_x = 0
+            if self.player.center_x < self.map_left:
+                self.player.center_x = self.map_right
+            elif self.player.center_x > self.map_right:
+                self.player.center_x = self.map_left
 
         if arcade.check_for_collision_with_list(self.player, self.wall_list):
             self.player.center_x = old_x
@@ -129,11 +127,10 @@ class PacmanGame(arcade.View):
             ghost_old_y = ghost.center_y
             ghost.update(delta_time, self.player.power_mode)
 
-
-            if ghost.center_x < 0:
-                ghost.center_x = MAP_WIDTH_PIXELS
-            elif ghost.center_x > MAP_WIDTH_PIXELS:
-                ghost.center_x = 0
+            if ghost.center_x < self.map_left:
+                ghost.center_x = self.map_right
+            elif ghost.center_x > self.map_right:
+                ghost.center_x = self.map_left
 
             if arcade.check_for_collision_with_list(ghost, self.wall_list):
                 ghost.center_x = ghost_old_x
