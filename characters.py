@@ -19,9 +19,10 @@ class Wall(arcade.Sprite):
 class Apple(arcade.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.texture = arcade.make_circle_texture(TILE_SIZE//2 - 4, arcade.color.RED)
+        self.texture = arcade.load_texture("pixelated-image-of-a-fruit-png.webp")
         self.center_x = x
         self.center_y = y
+        self.scale = (TILE_SIZE - 8) / self.texture.width
 
 class Character(arcade.Sprite):
     def __init__(self, x, y, texture):
