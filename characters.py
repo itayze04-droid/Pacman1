@@ -4,11 +4,11 @@ from constants import TILE_SIZE
 
 class Coin(arcade.Sprite):
     def __init__(self, x, y):
-        super().__init__()
-        self.texture = arcade.make_circle_texture(TILE_SIZE//2 - 6, arcade.color.GOLD)
+        super().__init__("coin.png")
+
         self.center_x = x
         self.center_y = y
-
+        self.scale = (TILE_SIZE - 10) / self.texture.width
 class Wall(arcade.Sprite):
     def __init__(self, x, y):
         super().__init__()

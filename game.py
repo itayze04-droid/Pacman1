@@ -21,7 +21,9 @@ class PacmanGame(arcade.View):
         self.start_y = 0
         self.background_music = arcade.load_sound("man-theme-original (mp3cut.net).mp3")
         self.music_player = None
-
+        self.coin_icon = arcade.load_texture("coin.png")
+        self.game_over_sound=arcade.load_sound("Pac Man Death Sound FX.mp3")
+        self.win_sound=arcade.load_sound("win_sound.mp3")
     def on_mouse_press(self, x, y, button, modifiers):
         if self.game_over:
             button_left = self.window.width / 2 - 100
@@ -90,15 +92,31 @@ class PacmanGame(arcade.View):
         self.player_list.draw()
         self.heart_list.draw()
 
-        arcade.draw_text(f"Score: {self.player.score}", 10, self.window.height - 30,
-                         arcade.color.WHITE, 16, bold=True)
+
+        arcade.draw_texture_rect(
+            texture=self.coin_icon,
+            rect=arcade.rect.XYWH(30, self.window.height - 30, 25, 25)
+        )
+
+
+        arcade.draw_text(
+            f"{self.player.score}",
+            55,
+            self.window.height - 42,
+            arcade.color.WHITE,
+            20,
+            bold=True
+        )
+
+
+        arcade.draw_text(f"{self.player.score}", 55, self.window.height - 42, arcade.color.WHITE, 20, bold=True)
         if self.game_over:
             if len(self.coin_list) != 0:
-                arcade.draw_text("GAME OVER", self.window.width / 2, self.window.height / 2,
-                                 arcade.color.RED, 40, align="center", anchor_x="center")
+                arcade.draw_text("GAME OVER", self.window.width / 2, self.window.height / 2+400,
+                                 arcade.color.RED, 80, align="center", anchor_x="center")
             else:
-                arcade.draw_text("YOU WON!", self.window.width / 2, self.window.height / 2,
-                                 arcade.color.GREEN, 40, align="center", anchor_x="center")
+                arcade.draw_text("YOU WON!", self.window.width / 2, self.window.height / 2+400,
+                                 arcade.color.GREEN, 80, align="center", anchor_x="center")
 
 
 
@@ -170,7 +188,11 @@ class PacmanGame(arcade.View):
             coin.remove_from_sprite_lists()
 
         if len(self.coin_list) == 0:
-            self.game_over = True
+            if not self.game_over:
+                self.game_over = True
+                if self.music_player:
+                    arcade.stop_sound(self.music_player)
+                arcade.play_sound(self.win_sound)
 
         hit_apples = arcade.check_for_collision_with_list(self.player, self.apple_list)
         for apple in hit_apples:
@@ -201,6 +223,7 @@ class PacmanGame(arcade.View):
                 self.player.change_x, self.player.change_y = 0, 0
 
                 if self.player.lives <= 0:
-                    self.game_over = True
+
                     arcade.stop_sound(self.music_player)
+                    arcade.play_sound(self.game_over_sound)
                     self.game_over = True
