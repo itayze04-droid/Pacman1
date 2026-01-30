@@ -1,7 +1,7 @@
 import arcade
 from constants import WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE
 from game import PacmanGame
-
+from  Start import *
 """
 נקודת הכניסה למשחק פקמן.
 
@@ -15,8 +15,7 @@ from game import PacmanGame
 def main():
     """פונקציית main שמריצה את המשחק."""
     window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, fullscreen=True)
-    view = PacmanGame()
-    view.setup()
+    view = StartScreen()
     window.show_view(view)
     arcade.run()
 

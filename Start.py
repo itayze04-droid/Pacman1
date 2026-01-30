@@ -1,51 +1,52 @@
 import arcade
 from game import PacmanGame
+from constants import WINDOW_TITLE
 
-
-
-class StartView(arcade.View):
+class StartScreen(arcade.View):
     def __init__(self):
         super().__init__()
 
-        self.play_btn = {"x": 300, "y": 250, "w": 200, "h": 60}
-
     def on_show_view(self):
-
         arcade.set_background_color(arcade.color.BLACK)
 
     def on_draw(self):
         self.clear()
 
+        # כותרת
+        arcade.draw_text(
+            "PACMAN",
+            self.window.width // 2,
+            self.window.height // 2 + 80,
+            arcade.color.YELLOW,
+            60,
+            anchor_x="center",
+            bold=True
+        )
 
-        arcade.draw_text("PACMAN", self.window.width / 2, 400,
-                         arcade.color.YELLOW, 60, anchor_x="center")
+        # הוראות
+        arcade.draw_text(
+            "Press ENTER to start",
+            self.window.width // 2,
+            self.window.height // 2,
+            arcade.color.WHITE,
+            24,
+            anchor_x="center"
+        )
 
+        arcade.draw_text(
+            "Press ESC to exit",
+            self.window.width // 2,
+            self.window.height // 2 - 40,
+            arcade.color.GRAY,
+            16,
+            anchor_x="center"
+        )
 
-        arcade.draw_lrbt_rectangle_filled(self.play_btn["x"],
-                                          self.play_btn["x"] + self.play_btn["w"],
-                                          self.play_btn["y"],
-                                          self.play_btn["y"] + self.play_btn["h"],
-                                          arcade.color.GREEN)
-
-
-        arcade.draw_text("PLAY",
-                         self.play_btn["x"] + self.play_btn["w"] / 2,
-                         self.play_btn["y"] + self.play_btn["h"] / 2,
-                         arcade.color.BLACK, 25, anchor_x="center", anchor_y="center")
-
-    def on_mouse_press(self, x, y, button, modifiers):
-
-        if (self.play_btn["x"] <= x <= self.play_btn["x"] + self.play_btn["w"] and
-                self.play_btn["y"] <= y <= self.play_btn["y"] + self.play_btn["h"]):
-
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ENTER:
             game_view = PacmanGame()
             game_view.setup()
             self.window.show_view(game_view)
 
-
-
-if __name__ == "__main__":
-    window = arcade.Window(800, 600, "Pacman Game")
-    start_view = StartView()
-    window.show_view(start_view)
-    arcade.run()
+        elif key == arcade.key.ESCAPE:
+            arcade.exit()

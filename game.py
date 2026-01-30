@@ -112,10 +112,10 @@ class PacmanGame(arcade.View):
         arcade.draw_text(f"{self.player.score}", 55, self.window.height - 42, arcade.color.WHITE, 20, bold=True)
         if self.game_over:
             if len(self.coin_list) != 0:
-                arcade.draw_text("GAME OVER", self.window.width / 2, self.window.height / 2+400,
+                arcade.draw_text("GAME OVER", self.window.width / 2, self.window.height / 2+300,
                                  arcade.color.RED, 80, align="center", anchor_x="center")
             else:
-                arcade.draw_text("YOU WON!", self.window.width / 2, self.window.height / 2+400,
+                arcade.draw_text("YOU WON!", self.window.width / 2, self.window.height / 2+300,
                                  arcade.color.GREEN, 80, align="center", anchor_x="center")
 
 
